@@ -1,1 +1,2 @@
-penanganan conflic feature b
+
+penanganan conflic feature A dan B
