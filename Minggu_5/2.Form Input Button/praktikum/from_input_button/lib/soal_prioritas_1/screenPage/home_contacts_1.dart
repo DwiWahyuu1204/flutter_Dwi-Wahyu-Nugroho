@@ -17,6 +17,9 @@ class _HomeContacts1State extends State<HomeContacts1> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController nomorTeleponController = TextEditingController();
   final List<Contact> contacts = [];
+  String nameValue = '';
+  String phoneValue = '';
+  bool isButtonEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,35 +41,53 @@ class _HomeContacts1State extends State<HomeContacts1> {
                 height: 16,
               ),
               TextFieldWidget(
-                  label: "Nama",
-                  hintext: 'Insert Your Name',
-                  controller: namaController),
+                label: "Nama",
+                hintext: 'Insert Your Name',
+                controller: namaController,
+                onChanged: (newValue) {
+                  setState(() {
+                    nameValue = newValue;
+                    updateButton();
+                    print('dari name $nameValue');
+                  });
+                },
+              ),
               const SizedBox(
                 height: 16,
               ),
               TextFieldWidget(
-                  label: "Nomor",
-                  hintext: '+62 ...',
-                  controller: nomorTeleponController),
+                label: "Nomor",
+                hintext: '+62 ...',
+                controller: nomorTeleponController,
+                onChanged: (newValue) {
+                  setState(() {
+                    phoneValue = newValue;
+                    updateButton();
+                    print('dari phone $phoneValue');
+                  });
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ButtonWidget(
-                      onPressed: () {
-                        String nama = namaController.text;
-                        print('dari Title $nama');
-                        String nomorTelepon = nomorTeleponController.text;
-                        print('dari Subtitle $nomorTelepon');
-                        Contact newContact = Contact(nama, nomorTelepon);
-                        contacts.add(newContact);
-                        for (var contact in contacts) {
-                          print(
-                              'Title: ${contact.title}, Subtitle: ${contact.subtitle}');
-                        }
-                        namaController.clear();
-                        nomorTeleponController.clear();
-                        setState(() {});
-                      },
+                      onPressed: isButtonEnabled
+                          ? () {
+                              String nama = namaController.text;
+                              print('dari Title $nama');
+                              String nomorTelepon = nomorTeleponController.text;
+                              print('dari Subtitle $nomorTelepon');
+                              Contact newContact = Contact(nama, nomorTelepon);
+                              contacts.add(newContact);
+                              for (var contact in contacts) {
+                                print(
+                                    'Title: ${contact.title}, Subtitle: ${contact.subtitle}');
+                              }
+                              namaController.clear();
+                              nomorTeleponController.clear();
+                              setState(() {});
+                            }
+                          : null,
                       text: 'Submit')
                 ],
               )
@@ -75,5 +96,15 @@ class _HomeContacts1State extends State<HomeContacts1> {
         ),
       ),
     );
+  }
+
+  void updateButton() {
+    if (nameValue.isNotEmpty && phoneValue.isNotEmpty) {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    } else {
+      isButtonEnabled = false;
+    }
   }
 }

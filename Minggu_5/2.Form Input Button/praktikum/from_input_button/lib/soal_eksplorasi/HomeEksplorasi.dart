@@ -7,14 +7,14 @@ import 'package:from_input_button/widget_global/textfield_widget.dart';
 import '../../soal_prioritas_1/models/data_contacts.dart';
 import '../../soal_prioritas_1/widget_prioritas1/header_contacts.dart';
 
-class HomeContacts2 extends StatefulWidget {
-  const HomeContacts2({super.key});
+class HomeEksplorasi extends StatefulWidget {
+  const HomeEksplorasi({super.key});
 
   @override
-  State<HomeContacts2> createState() => _HomeContacts2State();
+  State<HomeEksplorasi> createState() => _HomeEksplorasiState();
 }
 
-class _HomeContacts2State extends State<HomeContacts2> {
+class _HomeEksplorasiState extends State<HomeEksplorasi> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController nomorTeleponController = TextEditingController();
   final List<Contact> contacts = [];
@@ -23,6 +23,8 @@ class _HomeContacts2State extends State<HomeContacts2> {
   bool isButtonEnabled = false;
   bool isEditing = false;
   int selectedIndex = -1;
+  String nameErrorText = '';
+  String phoneErrorText = '';
 
   void updateButton() {
     if (nameValue.isNotEmpty && phoneValue.isNotEmpty) {
@@ -41,8 +43,6 @@ class _HomeContacts2State extends State<HomeContacts2> {
       isEditing = true;
       selectedIndex = index;
     });
-    nameValue = contacts[index].title;
-    phoneValue = contacts[index].subtitle;
   }
 
   void deleteContact(int index) {
@@ -73,6 +73,44 @@ class _HomeContacts2State extends State<HomeContacts2> {
     );
   }
 
+  String? validateName(String value) {
+    if (value.isEmpty) {
+      return 'Nama harus diisi';
+    } else {
+      List<String> words = value.split(' ');
+
+      // Mengecek apakah setiap kata dimulai dengan huruf kapital
+      for (String word in words) {
+        if (word.isNotEmpty && word[0] != word[0].toUpperCase()) {
+          return 'Setiap kata harus dimulai dengan huruf kapital';
+        }
+      }
+      // mengecek apakah kata lebih dari 2
+      if (value.length < 2) {
+        return 'Nama harus terdiri dari minimal 2 kata';
+      }
+
+      // Mengecek apakah nama mengandung angka atau karakter khusus
+      if (value.contains(RegExp(r'[0-9!@#%^&*()_+={}\[\]:;<>,.?~\\|-]'))) {
+        return 'Nama tidak boleh mengandung angka atau karakter khusus';
+      }
+
+      return '';
+    }
+  }
+
+  String? validatePhone(String value) {
+    if (value.isEmpty) {
+      return 'Nomor telepon harus diisi';
+    } else if (!value.startsWith('0')) {
+      return 'Nomor telepon harus dimulai dengan angka 0';
+    } else if (value.length < 8 || value.length > 15) {
+      return 'Panjang nomor telepon harus antara 8 dan 15 digit';
+    } else {
+      return ''; // Validasi berhasil
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String submitButtonText = isEditing ? "Update Data" : "Submit";
@@ -98,9 +136,11 @@ class _HomeContacts2State extends State<HomeContacts2> {
                   label: "Nama",
                   hintext: 'Insert Your Name',
                   controller: namaController,
+                  errorText: nameErrorText,
                   onChanged: (newValue) {
                     setState(() {
                       nameValue = newValue;
+                      nameErrorText = validateName(nameValue)!;
                       updateButton();
                       print('dari name $nameValue');
                     });
@@ -113,9 +153,12 @@ class _HomeContacts2State extends State<HomeContacts2> {
                   label: "Nomor",
                   hintext: '+62 ...',
                   controller: nomorTeleponController,
+                  errorText: phoneErrorText,
+                  keyboardType: TextInputType.number,
                   onChanged: (newValue) {
                     setState(() {
                       phoneValue = newValue;
+                      phoneErrorText = validatePhone(phoneValue)!;
                       updateButton();
                       print('dari phone $nameValue');
                     });
@@ -151,6 +194,8 @@ class _HomeContacts2State extends State<HomeContacts2> {
                                   isButtonEnabled = false;
                                   nameValue = "";
                                   phoneValue = '';
+                                  nameErrorText = '';
+                                  phoneErrorText = '';
                                 });
                               }
                             : null,
