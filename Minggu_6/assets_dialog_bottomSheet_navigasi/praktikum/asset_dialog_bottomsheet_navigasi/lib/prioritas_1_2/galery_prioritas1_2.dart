@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widget_global/drawer_widget.dart';
+
 class GalleryPage extends StatelessWidget {
   final List<String> images = [
     'assets/images/image1.jpg',
@@ -24,6 +26,7 @@ class GalleryPage extends StatelessWidget {
               icon: const Icon(Icons.navigate_next_sharp))
         ],
       ),
+      drawer: const drawer_widget(),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 2, mainAxisSpacing: 2),
