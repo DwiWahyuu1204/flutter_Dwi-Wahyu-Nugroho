@@ -48,20 +48,41 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _priceController,
-                ),
-                TextFormField(
-                  controller: _cameraController,
-                ),
-                TextFormField(
-                  controller: _storageController,
-                ),
-                ElevatedButton(
-                    onPressed: _getRekom, child: Text('get Rekomendasi'))
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Masukan Harga')),
+                    controller: _priceController,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Masukan Camera')),
+                    controller: _cameraController,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text('Masukan Storage')),
+                    controller: _storageController,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                      onPressed: _getRekom, child: Text('get Rekomendasi'))
+                ],
+              ),
             )),
       ),
     );
